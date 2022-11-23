@@ -1,8 +1,10 @@
 package com.gunjo.skilldemo.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.core.io.*;
 import org.springframework.data.redis.connection.*;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.*;
 import org.springframework.data.redis.serializer.*;
 
 /**
@@ -27,6 +29,24 @@ public class RedisConfig {
         // 注入连接工厂
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
+    }
+
+//    @Bean
+//    public DefaultRedisScript<Boolean> script() {
+//        DefaultRedisScript<Boolean> redisScript = new DefaultRedisScript<>();
+//        // lock.lua脚本位置与application.yml同级目录
+//        redisScript.setLocation(new ClassPathResource("lock.lua"));
+//        redisScript.setResultType(Boolean.class);
+//        return redisScript;
+//    }
+
+    @Bean
+    public DefaultRedisScript<Long> script() {
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+        // lock.lua脚本位置与application.yml同级目录
+        redisScript.setLocation(new ClassPathResource("stock.lua"));
+        redisScript.setResultType(Long.class);
+        return redisScript;
     }
 
 }

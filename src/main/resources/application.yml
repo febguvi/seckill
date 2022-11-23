@@ -1,5 +1,27 @@
 spring:
 
+  web:
+    # 静态资源处理
+    resources:
+      # 启动静态资源处理
+      add-mappings: true
+      chain:
+        # 资源链启动缓存，默认启动
+        cache: true
+        # 启用资源链，默认禁用
+        enabled: true
+        # 启动压缩资源(gzip,brotli)解析，默认禁用
+        compressed: true
+        # html-application-cache: true 不推荐使用
+
+      cache:
+        cachecontrol:
+          # 缓存相应时间 单位秒
+          max-age: 3600
+      static-locations: classpath:/static/
+
+
+
   thymeleaf:
     cache: false
 
@@ -48,6 +70,43 @@ spring:
         # 最小空闲连接，默认0
         min-idle: 5
 
+
+  # RabbitMQ
+  rabbitmq:
+    # 服务器
+    host: 192.168.134.133
+    # 用户名
+    username: onion
+    # 密码
+    password: 123qwe
+    # 虚拟主机
+    virtual-host: /
+    # 端口号
+    port: 5672
+    listener:
+      simple:
+        # 消费者最小数量
+        concurrency: 10
+        # 消费者最大数量
+        max-concurrency: 10
+        # 限制消费者每次只能处理一条消息，处理完毕再继续下一条消息
+        prefetch: 1
+        # 启动时是否默认启动容器，默认true
+        auto-startup: true
+        # 被拒绝时重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+        # 发布重试，默认false
+        enabled: true
+        # 重试时间，默认1000ms
+        initial-interval: 1000ms
+        # 重试最大次数，默认3次
+        max-attempts: 3
+        # 重试最大间隔时间，默认10000ms
+        max-interval: 10000ms
+        # 重试的间隔系数，比如配2.0，第一次10s，第二次就20s，第三次40s
+        multiplier: 1
 
 
 #mybatis-plus
